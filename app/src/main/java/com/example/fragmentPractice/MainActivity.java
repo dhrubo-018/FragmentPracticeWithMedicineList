@@ -1,6 +1,7 @@
 package com.example.fragmentPractice;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -27,6 +28,26 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
 
         priceList = new ArrayList<Integer>();
         priceList = getPriceList(priceList);
+
+        //the phone is in portrait mode
+        if(findViewById(R.id.layout_portrait) != null){
+            FragmentManager manager = this.getSupportFragmentManager();
+
+            manager.beginTransaction()
+                    .hide(manager.findFragmentById(R.id.detailFragment))
+                    .show(manager.findFragmentById(R.id.listFragment))
+                    .commit();
+        }
+
+        //the phone is in landscape mode
+        if(findViewById(R.id.layout_land) != null){
+            FragmentManager manager = this.getSupportFragmentManager();
+
+            manager.beginTransaction()
+                    .show(manager.findFragmentById(R.id.listFragment))
+                    .show(manager.findFragmentById(R.id.detailFragment))
+                    .commit();
+        }
     }
 
     ArrayList updateMedDetails (ArrayList medNames){
@@ -53,5 +74,16 @@ public class MainActivity extends AppCompatActivity implements ListFragment.Item
     public void onItemSelected(int index) {
         tvMedName.setText(medNames.get(index));
         tvPrice.setText("Price: " + priceList.get(index));
+
+        //the phone is in portrait mode
+        if(findViewById(R.id.layout_portrait) != null){
+            FragmentManager manager = this.getSupportFragmentManager();
+
+            manager.beginTransaction()
+                    .show(manager.findFragmentById(R.id.detailFragment))
+                    .hide(manager.findFragmentById(R.id.listFragment))
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 }
